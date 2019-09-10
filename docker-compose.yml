@@ -1,0 +1,18 @@
+version: "3.4"
+services:
+
+  client:
+    image: ubuntu:18.04
+    command: bash -c "/bin/echo 'Hello from client container' && sleep infinity"
+    depends_on: 
+      - server
+
+  server:
+    image: node:10-alpine
+    volumes:
+      - ./scripts:/scripts
+    entrypoint: /scripts/launch.sh
+    healthcheck:
+      test: echo hello | nc localhost 8001 | grep hello
+      interval: 5s
+      timeout: 60s
