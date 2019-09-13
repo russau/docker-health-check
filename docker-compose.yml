@@ -1,18 +1,21 @@
-version: "3.4"
+version: '2.3'
 services:
-
   client:
-    image: ubuntu:18.04
-    command: bash -c "/bin/echo 'Hello from client container' && sleep infinity"
+    image: busybox:1
+    container_name: client
+    command: sh -c 'echo "$$(date) Server says $$(echo hello | nc server 8001)" && sleep infinity'
     depends_on: 
-      - server
-
+      server:
+        condition: service_healthy
+  
   server:
     image: node:10-alpine
+    container_name: server
     volumes:
       - ./scripts:/scripts
     entrypoint: /scripts/launch.sh
     healthcheck:
       test: echo hello | nc localhost 8001 | grep hello
-      interval: 5s
-      timeout: 60s
+      start_period: 10s
+      interval: 10s
+

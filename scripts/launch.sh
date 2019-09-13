@@ -1,5 +1,5 @@
 #!/bin/sh
-echo "Sleeping first"
+echo "$(date) Sleeping first"
 sleep 30
-echo "Launching server"
+echo "$(date) Launching server"
 /usr/local/bin/node /scripts/echo.js
